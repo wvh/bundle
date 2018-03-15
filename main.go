@@ -60,20 +60,18 @@ var keywords = []string{
 	"var",
 }
 
+// Verbose sets the verbosity level.
 var Verbose = false
 
+// BUFSIZE determines the size of read and processing buffers.
 const BUFSIZE = 4096
 
-func quoteFile(w io.Writer, fn string) error {
+func quoteFile(out io.Writer, fn string) error {
 	in, err := os.Open(fn)
 	if err != nil {
 		return err
 	}
 	defer in.Close()
-
-	// use buffered i/o; if already buffered, NewWriter will simply return the existing writer
-	out := bufio.NewWriter(w)
-	defer out.Flush()
 
 	buf := make([]byte, BUFSIZE)
 	quoted := make([]byte, 0, 2*BUFSIZE)
