@@ -78,15 +78,15 @@ func quoteFile(out io.Writer, fn string) error {
 
 	out.Write([]byte(`"`))
 	for {
-		n, errEof := in.Read(buf)
+		n, errEOF := in.Read(buf)
 
 		// real error
-		if errEof != nil && errEof != io.EOF {
-			return errEof
+		if errEOF != nil && errEOF != io.EOF {
+			return errEOF
 		}
 
 		// error was EOF, we're done
-		if errEof == io.EOF && n == 0 {
+		if errEOF == io.EOF && n == 0 {
 			break
 		}
 
@@ -245,6 +245,7 @@ func makeVarNameFromFileName(path, prefix string) (string, error) {
 	return makeVarName(filepath.Base(path), prefix)
 }
 
+// A Bundler holds the settings for the bundling process.
 type Bundler struct {
 	outFile     string
 	pkgName     string
@@ -253,6 +254,7 @@ type Bundler struct {
 	makeVarName func(string, string) (string, error)
 }
 
+// NewBundler initialises a new Bundler with the given settings.
 func NewBundler(outFile string, pkgName string, prefix string, useConst bool, varNameFunc func(string, string) (string, error)) *Bundler {
 	if varNameFunc == nil {
 		varNameFunc = makeVarNameFromBaseName
@@ -271,6 +273,7 @@ func NewBundler(outFile string, pkgName string, prefix string, useConst bool, va
 	}
 }
 
+// ProcessFiles does the actual work by including each of the provided files into the output file.
 func (bundler *Bundler) ProcessFiles(files ...string) error {
 	var (
 		out *os.File
