@@ -1,0 +1,5 @@
+language: go
+# arbitrary minimum version 1.8
+go:
+  - "1.8.x"
+  - "1.x"
